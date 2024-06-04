@@ -47,7 +47,7 @@ if prompt := st.chat_input("Can I help you today?"):
                 for char in response_text:
                     generated_text += char
                     response_placeholder.markdown(f"\n{generated_text}\n")
-                    time.sleep(0.05)
+                    time.sleep(0.02)
         except Exception as e:
             print(f"Exception in Streamlit app: {str(e)}")
             response_text = f"An error occurred: {str(e)}"
