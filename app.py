@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import streamlit as st
 import os
+import time
 
 from functions.gemini import gemini
 
@@ -34,23 +35,22 @@ if prompt := st.chat_input("Can I help you today?"):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    response_text = ""
-    response_generator = gemini(prompt, os.getenv('GEMINI_API_KEY'))
+    response_text = gemini(prompt, os.getenv('GEMINI_API_KEY'))
+    generated_text = ""
 
     with st.chat_message("assistant"):
         response_placeholder = st.empty()
         try:
-            if response_generator is None:
-                response_text = "An error occurred: gemini function returned None"
+            if response_text.startswith("An error occurred"):
                 response_placeholder.markdown(response_text)
             else:
-                # print("Generator created successfully")
-                for word in response_generator:
-                    response_text += word
-                    response_placeholder.markdown(response_text)
+                for char in response_text:
+                    generated_text += char
+                    response_placeholder.markdown(f"\n{generated_text}\n")
+                    time.sleep(0.05)
         except Exception as e:
             print(f"Exception in Streamlit app: {str(e)}")
             response_text = f"An error occurred: {str(e)}"
             response_placeholder.markdown(response_text)
 
-    st.session_state.messages.append({"role": "assistant", "content": response_text})
+    st.session_state.messages.append({"role": "assistant", "content": generated_text})
