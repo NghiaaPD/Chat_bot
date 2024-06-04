@@ -10,10 +10,9 @@ def gemini(message, GEMINI_API_KEY):
     model = genai.GenerativeModel('gemini-1.0-pro')
 
     try:
-        print(f"Generating content for message: {message}")  # Debugging: Check message
+        print(f"Generating content for message: {message}")
         response = model.generate_content(message)
 
-        # Assuming response has a 'text' attribute or similar
         if not hasattr(response, 'text'):
             return "An error occurred: The response object does not have a 'text' attribute"
 
